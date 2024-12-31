@@ -19,16 +19,17 @@ const port = process.env.PORT || 4000; // 4000
 app.use(express.json());
 app.use(bodyParser.json());
 
+
 const corsOptions = {
-  origin: '*', // Replace with your frontend domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  origin: 'https://food-deleviry.netlify.app',  // Allow only this domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options('*', cors(corsOptions));
-
+app.get('/test', (req, res) => {
+  res.json({ success: true, data: ['Pizza', 'Burger', 'Pasta'] });
+});
 // db connection
 connectDB();
 
@@ -52,4 +53,7 @@ app.use((err, req, res, next) => {
     .json({ message: "Internal Server Error", error: err.message });
 });
 
-export default app
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
