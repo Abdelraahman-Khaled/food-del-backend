@@ -37,16 +37,35 @@ const listFood = async (req, res) => {
 // remove food 
 const removeFood = async (req, res) => {
     try {
-        const food = await foodModel.findById(req.body.id)
-        fs.unlink(`uploads/${food.image}`, () => { })
-        await foodModel.findOneAndDelete(req.body.id)
-        res.status(200).json({ success: true, message: "Food Removed" })
-    }
-    catch (error) {
+        // Validate that the id exists in the request body
+        if (!req.body.id) {
+            return res.status(400).json({ success: false, message: 'Food ID is required' });
+        }
+
+        // Find the food item by ID
+        const food = await foodModel.findById(req.body.id);
+        if (!food) {
+            return res.status(404).json({ success: false, message: 'Food not found' });
+        }
+
+        // Delete the associated image file
+        fs.unlink(`uploads/${food.image}`, (err) => {
+            if (err) {
+                console.log('Error deleting image:', err);
+                // Continue with deletion even if image deletion fails
+            }
+        });
+
+        // Remove the food item from the database
+        await foodModel.findOneAndDelete({ _id: req.body.id });
+
+        // Return success response
+        res.status(200).json({ success: true, message: 'Food removed' });
+    } catch (error) {
         console.log(error);
-        res.status(500).json({ success: false, message: 'faild', message: error })
+        res.status(500).json({ success: false, message: 'Failed to remove food', error: error.message });
     }
-}
+};
 
 
 export { addFood, listFood, removeFood }
