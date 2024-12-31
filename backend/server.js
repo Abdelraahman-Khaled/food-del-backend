@@ -20,13 +20,13 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 
-const corsOptions = {
-  origin: 'https://food-deleviry.netlify.app',  // Allow only this domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
+// const corsOptions = {
+//   origin: 'https://food-deleviry.netlify.app',  // Allow only this domain
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.get('/test', (req, res) => {
   res.json({ success: true, data: ['Pizza', 'Burger', 'Pasta'] });
 });
