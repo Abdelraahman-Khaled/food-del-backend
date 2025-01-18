@@ -13,7 +13,6 @@ dotenv.config();
 
 // app config
 const app = express();
-const PORT = process.env.PORT || 4000;
 
 //  middleware
 app.use(express.json());
@@ -53,6 +52,7 @@ app.use((err, req, res, next) => {
     .json({ message: "Internal Server Error", error: err.message });
 });
 
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
